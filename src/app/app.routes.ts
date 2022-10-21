@@ -4,19 +4,26 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: 'data-entry',
+    pathMatch: 'full',
+  },
+  {
+    path: 'data-entry',
     loadChildren: () =>
-      import('./pages/home/home.module').then(m => m.HomeModule)
-  }
+      import('./modules/data-entry/data-entry-module').then(
+        (m) => m.DataEntryModule
+      ),
+  },
 ];
 
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-    useHash: true,
-    preloadingStrategy: PreloadAllModules,
-    relativeLinkResolution: 'legacy'
-})
+      useHash: true,
+      preloadingStrategy: PreloadAllModules,
+      relativeLinkResolution: 'legacy',
+    }),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class RoutingModule {}
