@@ -1,0 +1,68 @@
+<div
+  class="p-2"
+  *ngIf="{
+    currentUser: currentUser$ | async
+  } as params"
+>
+  <mat-progress-bar
+    mode="indeterminate"
+    *ngIf="!params?.currentUser"
+  ></mat-progress-bar>
+  <app-top-nav-bar
+    *ngIf="params?.currentUser"
+    [currentUser]="params?.currentUser"
+    (selectedProgramForm)="onGetSelectedProgramForm($event)"
+  ></app-top-nav-bar>
+  <div class="w-100" *ngIf="params?.currentUser">
+    <mat-card>
+      <div class="w-50">
+        <button
+          mat-stroked-button
+          class="w-50"
+          (click)="onToggleOuFilter($event)"
+        >
+          {{
+            !selectedOrgUnitItems
+              ? 'Select Organisation Unit'
+              : selectedOrgUnitItems[0]?.name
+          }}
+          <!-- <mat-icon>list_alt</mat-icon> -->
+        </button>
+        <ngx-dhis2-org-unit-filter
+          *ngIf="showOuFilter"
+          [orgUnitFilterConfig]="orgUnitFilterConfig"
+          [selectedOrgUnitItems]="selectedOrgUnitItems"
+          (orgUnitUpdate)="onOrgUnitUpdate($event, 'UPDATE')"
+          (orgUnitClose)="onOrgUnitUpdate($event, 'CLOSE')"
+        ></ngx-dhis2-org-unit-filter>
+      </div>
+    </mat-card>
+
+    <div class="w-100 p-4 d-flex justify-content-between">
+      <div class="col-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4>
+              <span class="glyphicon glyphicon-indent-left"></span> Step 1
+            </h4>
+          </div>
+          <div class="panel-body">
+            <h5>
+              To start, first step is select an organisation unit at the top.
+            </h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4><span class="glyphicon glyphicon-calendar"></span> Step 2</h4>
+          </div>
+          <div class="panel-body">
+            <h5>Then, Select the Program at the top.</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

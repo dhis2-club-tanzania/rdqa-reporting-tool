@@ -1,0 +1,14 @@
+<div class="p-2" *ngIf="{ program: program$ | async } as params">
+  <div class="w-100 d-flex justify-content-left">
+    <button mat-stroked-button routerLink="/data-entry">Back</button>
+    <a class="ml-4"> {{ params?.program?.name }}</a>
+  </div>
+  <mat-progress-bar
+    mode="indeterminate"
+    *ngIf="!params?.program"
+  ></mat-progress-bar>
+  <app-data-entry-form-container
+    *ngIf="params?.program"
+    [program]="params?.program"
+  ></app-data-entry-form-container>
+</div>

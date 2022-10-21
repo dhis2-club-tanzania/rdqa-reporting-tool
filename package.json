@@ -1,10 +1,10 @@
 {
-  "name": "ngx-seed-app",
+  "name": "rdqa-reporting",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build --configuration production --aot && cd dist/ngx-seed-app && zip -r -D ngx-seed-app.zip .",
+    "start": "ng serve --port 4202",
+    "build": "ng build --configuration production --aot && cd dist/rdqa-reporting && zip -r -D rdqa-reporting.zip .",
     "test": "ng test",
     "test:ci": "ng test -- --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI",
     "lint": "ng lint",

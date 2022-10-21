@@ -19,6 +19,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgxDhis2OrgUnitFilterModule } from '@iapps/ngx-dhis2-org-unit-filter';
 import { NgxDhis2DataFilterModule } from '@iapps/ngx-dhis2-data-filter';
 import { NgxDhis2PeriodFilterModule } from '@iapps/ngx-dhis2-period-filter';
+import { sharedComponents } from './components';
 
 @NgModule({
   imports: [
@@ -40,9 +41,10 @@ import { NgxDhis2PeriodFilterModule } from '@iapps/ngx-dhis2-period-filter';
     MatProgressBarModule,
     NgxDhis2OrgUnitFilterModule,
     NgxDhis2DataFilterModule,
-    NgxDhis2PeriodFilterModule
+    NgxDhis2PeriodFilterModule,
   ],
   exports: [
+    ...sharedComponents,
     MatButtonModule,
     MatCardModule,
     MatChipsModule,
@@ -60,8 +62,8 @@ import { NgxDhis2PeriodFilterModule } from '@iapps/ngx-dhis2-period-filter';
     MatProgressBarModule,
     NgxDhis2OrgUnitFilterModule,
     NgxDhis2DataFilterModule,
-    NgxDhis2PeriodFilterModule
+    NgxDhis2PeriodFilterModule,
   ],
-  declarations: []
+  declarations: [...sharedComponents],
 })
 export class SharedModule {}
