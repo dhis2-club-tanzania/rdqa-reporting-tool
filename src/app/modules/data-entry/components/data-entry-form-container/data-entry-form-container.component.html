@@ -1,1 +1,23 @@
-<p>data-entry-form-container works!</p>
+<div class="p-2">
+  <div class="w-25">
+    <app-form
+      [fields]="[supervisionDateField]"
+      (formUpdate)="onFormUpdate($event)"
+    ></app-form>
+  </div>
+  <app-tracked-entity-attribute-entry
+    *ngIf="program?.programType == 'WITH_REGISTRATION'"
+    [programTrackedEntityAttributes]="program?.programTrackedEntityAttributes"
+  ></app-tracked-entity-attribute-entry>
+
+  <div class="program-stages-entry">
+    <div class="w-100" *ngFor="let programStage of program?.programStages">
+      <div class="h5" [id]="programStage?.id">
+        {{ programStage?.name }}
+      </div>
+      <app-program-stage-entry
+        [programStage]="programStage"
+      ></app-program-stage-entry>
+    </div>
+  </div>
+</div>

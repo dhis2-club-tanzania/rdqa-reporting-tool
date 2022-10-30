@@ -24,12 +24,25 @@ export class ProgramsListService {
       );
   }
 
-  getProgramDetailsById(id: string): Observable<any> {
-    return this.httpClient.get(`programs/${id}?fields=*`).pipe(
+  getProgramDetailsById(id: string, fields?: string): Observable<any> {
+    return this.httpClient.get(`programs/${id}?fields=${fields}`).pipe(
       map((response) => {
         return response;
       }),
       catchError((error) => of(error))
     );
+  }
+
+  getProgramStageDetails(programStageId: string): Observable<any> {
+    return this.httpClient
+      .get(
+        `programStages/${programStageId}.json?fields=id,name,programStageDataElements[id,sortOrder,mandatory,dataElement[id,name,valueType,optionSetValue,optionSet[id,name,options[id,name,code]]]],programStageSections[id,name,sortOrder,dataElements[id,name,valueType,optionSetValue,optionSet[id,name,options[id,name,code]]]]`
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error) => of(error))
+      );
   }
 }

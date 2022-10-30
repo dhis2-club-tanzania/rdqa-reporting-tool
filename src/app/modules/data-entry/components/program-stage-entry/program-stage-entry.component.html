@@ -1,0 +1,37 @@
+<div class="p-3" *ngIf="{ programStage: programStage$ | async } as params">
+  <mat-progress-bar
+    mode="indeterminate"
+    *ngIf="!params?.programStage"
+  ></mat-progress-bar>
+  <div
+    *ngIf="
+      params?.programStage?.programStageSections &&
+      params?.programStage?.programStageSections?.length > 0
+    "
+  >
+    <div
+      *ngFor="
+        let programStageSection of params?.programStage?.programStageSections
+      "
+    >
+      <div class="h5">
+        {{ programStageSection?.name }}
+      </div>
+      <div>
+        <app-program-stage-section-entry
+          [programStageSection]="programStageSection"
+        ></app-program-stage-section-entry>
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="
+      params?.programStage?.programStageSections &&
+      params?.programStage?.programStageSections?.length === 0
+    "
+  >
+    <app-program-stage-general-entry
+      [programStage]="params?.programStage"
+    ></app-program-stage-general-entry>
+  </div>
+</div>
