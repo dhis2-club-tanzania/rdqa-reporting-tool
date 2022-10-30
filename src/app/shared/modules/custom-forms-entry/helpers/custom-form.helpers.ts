@@ -210,6 +210,20 @@ function getDataValue(data, id) {
   return dataObject ? dataObject.value : '';
 }
 
+function getIndicatorsAndTheirValues() {
+  let indicatorIds = [];
+  const formIndicators = document.querySelectorAll("input[name='indicator']");
+  if (formIndicators) {
+    console.log(formIndicators);
+    formIndicators?.forEach((indElement) => {
+      const id = indElement?.getAttribute('id')?.replace('indicator', '');
+      console.log(id);
+      indicatorIds = [...indicatorIds, id];
+    });
+  }
+  return indicatorIds;
+}
+
 function evaluateIndicatorValuesOnFormOpen(indicators, entryFormType) {
   if (
     indicators &&
@@ -218,42 +232,43 @@ function evaluateIndicatorValuesOnFormOpen(indicators, entryFormType) {
   ) {
     const formIndicators = document.querySelectorAll("input[name='indicator']");
     if (formIndicators) {
-      formIndicators.forEach((indicator) => {
-        const formulaPattern = /#\{.+?\}/g;
-        let valuesObject = {};
-        indicators[indicator.id].expression
-          .match(formulaPattern)
-          .forEach((elem) => {
-            const inputValueElement: any = document.querySelector(
-              "input[id='" +
-                elem.replace(/[#\{\}]/g, '').replace('.', '-') +
-                '-val' +
-                "']"
-            );
-            const valueKey =
-              entryFormType && entryFormType === 'aggregate'
-                ? elem.replace('}', '').replace('#{', '')
-                : elem.split('.')[1].replace('}', '');
-            valuesObject[valueKey] =
-              inputValueElement && inputValueElement.value
-                ? inputValueElement.value
-                : 0;
-          });
-        const indValue = evaluateIndicatorExpression(
-          {
-            expression: indicators[indicator.id].expression,
-            left: indicators[indicator.id]?.left,
-            right: indicators[indicator.id]?.right,
-          },
-          valuesObject,
-          valuesObject,
-          entryFormType
-        );
-        const inputElement: any = document.querySelector(
-          "input[id='" + indicator.id + "']"
-        );
-        inputElement.value = indValue;
-      });
+      console.log(formIndicators);
+      // formIndicators.forEach((indicator) => {
+      //   const formulaPattern = /#\{.+?\}/g;
+      //   let valuesObject = {};
+      //   indicators[indicator.id].expression
+      //     .match(formulaPattern)
+      //     .forEach((elem) => {
+      //       const inputValueElement: any = document.querySelector(
+      //         "input[id='" +
+      //           elem.replace(/[#\{\}]/g, '').replace('.', '-') +
+      //           '-val' +
+      //           "']"
+      //       );
+      //       const valueKey =
+      //         entryFormType && entryFormType === 'aggregate'
+      //           ? elem.replace('}', '').replace('#{', '')
+      //           : elem.split('.')[1].replace('}', '');
+      //       valuesObject[valueKey] =
+      //         inputValueElement && inputValueElement.value
+      //           ? inputValueElement.value
+      //           : 0;
+      //     });
+      //   const indValue = evaluateIndicatorExpression(
+      //     {
+      //       expression: indicators[indicator.id].expression,
+      //       left: indicators[indicator.id]?.left,
+      //       right: indicators[indicator.id]?.right,
+      //     },
+      //     valuesObject,
+      //     valuesObject,
+      //     entryFormType
+      //   );
+      //   const inputElement: any = document.querySelector(
+      //     "input[id='" + indicator.id + "']"
+      //   );
+      //   inputElement.value = indValue;
+      // });
     }
   }
 }
@@ -496,6 +511,8 @@ export function onFormReady(
     }
   }
 
+  const indicatorIds = getIndicatorsAndTheirValues();
+
   const returnedFormFuncObject = formReadyFunc(
     formType,
     entryFormStatusColors,
@@ -503,7 +520,8 @@ export function onFormReady(
     indicators,
     lastEvent,
     elementsToDisable,
-    dataValues
+    dataValues,
+    indicatorIds
   );
   // console.log("returnedFormFuncObject", returnedFormFuncObject);
   return returnedFormFuncObject;
@@ -517,8 +535,12 @@ export function onDataValueChange(
   indicators: any,
   lastEvent: any,
   elementsToDisable: string[],
-  dataValues: any
+  dataValues: any,
+  indicatorValues: any
 ) {
+  if (indicatorValues) {
+    console.log('indicatorValues', indicatorValues);
+  }
   // Get attribute from the element
   const elementId = element.getAttribute('id');
 

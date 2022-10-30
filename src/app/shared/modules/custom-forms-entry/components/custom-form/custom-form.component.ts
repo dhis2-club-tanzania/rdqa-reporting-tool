@@ -16,6 +16,7 @@ import {
   updateFormFieldColor,
   setDataValues,
 } from '../../helpers/custom-form.helpers';
+import { NgxDhis2HttpClientService } from '@iapps/ngx-dhis2-http-client';
 
 @Component({
   selector: 'ngx-custom-form',
@@ -37,7 +38,10 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
   currentDataValues = {};
   _htmlMarkup: SafeHtml;
   entryFormStatusColors: any = {};
-  constructor(private sanitizer: DomSanitizer) {
+  constructor(
+    private sanitizer: DomSanitizer,
+    private httpClient: NgxDhis2HttpClientService
+  ) {
     this.entryFormStatusColors = {
       OK: '#32db64',
       WAIT: '#fffe8c',
@@ -99,6 +103,7 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
 
   setScriptsOnHtmlContent(scripts?) {
     const dataValues = this.elementsDataValues;
+    let self = this;
     onFormReady(
       this.dataElements,
       this.formType,
@@ -114,8 +119,35 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
         indicators,
         lastEvent,
         elementsToDisable,
-        dataValues
+        dataValues,
+        indicatorIds?
       ) {
+        console.log('indicatorIds', indicatorIds);
+        self.httpClient
+          .get(
+            `analytics?dimension=dx:${indicatorIds?.join(
+              ','
+            )}&dimension=pe:2020&dimension=ou:CAWjYmd5Dea`
+          )
+          .subscribe((response) => {
+            if (response) {
+              let indicatorValues = {};
+              response?.rows?.forEach((row) => {
+                indicatorValues[row[0]] = row[3];
+              });
+              onDataValueChange(
+                null,
+                entryFormType,
+                entryFormStatusColors,
+                dataElementObjects,
+                indicators,
+                lastEvent,
+                elementsToDisable,
+                dataValues,
+                indicatorValues
+              );
+            }
+          });
         // Listen for change event
         document.addEventListener(
           'change',
@@ -135,7 +167,8 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
                 indicators,
                 lastEvent,
                 elementsToDisable,
-                dataValues
+                dataValues,
+                null
               );
             }
             event.preventDefault();
