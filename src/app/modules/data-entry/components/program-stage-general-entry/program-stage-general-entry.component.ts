@@ -28,7 +28,7 @@ export class ProgramStageGeneralEntryComponent implements OnInit {
           : null;
       })
       ?.filter((formField) => formField);
-    console.log(this.generalFormFields);
+    // console.log(this.generalFormFields);
   }
 
   onFormUpdate(formValue: FormValue): void {}

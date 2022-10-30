@@ -206,7 +206,7 @@ export function setDataValues(elementId, value) {
 }
 
 function getDataValue(data, id) {
-  var dataObject = data[id];
+  var dataObject = data && id && data[id] ? data[id] : null;
   return dataObject ? dataObject.value : '';
 }
 
@@ -302,7 +302,7 @@ export function onFormReady(
 
       if (formType == 'tracker' && !dataElementId) {
         dataElementId = elementId;
-        // console.log("element id ", elementId, dataElementId);
+        console.log('element id ', elementId, dataElementId);
         const dataElementDetails = dataElementObjects[dataElementId]
           ? dataElementObjects[dataElementId]
           : {};

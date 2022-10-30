@@ -36,7 +36,7 @@ export class ProgramsListService {
   getProgramStageDetails(programStageId: string): Observable<any> {
     return this.httpClient
       .get(
-        `programStages/${programStageId}.json?fields=id,name,programStageDataElements[id,sortOrder,mandatory,dataElement[id,name,valueType,optionSetValue,optionSet[id,name,options[id,name,code]]]],programStageSections[id,name,sortOrder,dataElements[id,name,valueType,optionSetValue,optionSet[id,name,options[id,name,code]]]]`
+        `programStages/${programStageId}.json?fields=id,name,dataEntryForm[*],programStageDataElements[id,sortOrder,mandatory,dataElement[id,name,valueType,optionSetValue,optionSet[id,name,options[id,name,code]]]],programStageSections[id,name,sortOrder,dataElements[id,name,valueType,optionSetValue,optionSet[id,name,options[id,name,code]]]]`
       )
       .pipe(
         map((response) => {

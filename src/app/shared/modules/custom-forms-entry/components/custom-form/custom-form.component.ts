@@ -92,11 +92,12 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
         this.getScriptsContents(this.customFormDesign)
       );
     } catch (error) {
+      this.setScriptsOnHtmlContent();
       console.log('ng after view int ' + JSON.stringify(error));
     }
   }
 
-  setScriptsOnHtmlContent(scripts) {
+  setScriptsOnHtmlContent(scripts?) {
     const dataValues = this.elementsDataValues;
     onFormReady(
       this.dataElements,
@@ -143,12 +144,14 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
         );
 
         // Embed inline javascripts
-        const scriptsContents = `
+        if (scripts) {
+          const scriptsContents = `
           try {${scripts.join('')}} catch(e) { console.log(e);}`;
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.innerHTML = scriptsContents;
-        document.getElementById(`_custom_entry_form_`).appendChild(script);
+          const script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.innerHTML = scriptsContents;
+          document.getElementById(`_custom_entry_form_`).appendChild(script);
+        }
       }
     );
   }

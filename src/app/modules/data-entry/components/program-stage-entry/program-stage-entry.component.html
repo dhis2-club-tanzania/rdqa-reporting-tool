@@ -11,18 +11,29 @@
   >
     <div
       *ngFor="
-        let programStageSection of params?.programStage?.programStageSections
+        let programStageSection of params?.programStage?.programStageSections;
+        let count = index
       "
     >
-      <div class="h5">
-        {{ programStageSection?.name }}
-      </div>
-      <div>
-        <app-program-stage-section-entry
-          [programStageSection]="programStageSection"
-        ></app-program-stage-section-entry>
-      </div>
+      <ng-container *ngIf="count < 2">
+        <div class="h5">
+          {{ programStageSection?.name }}
+        </div>
+        <div>
+          <app-program-stage-section-entry
+            [programStageSection]="programStageSection"
+          ></app-program-stage-section-entry>
+        </div>
+      </ng-container>
     </div>
+  </div>
+  <div *ngIf="params?.programStage?.dataEntryForm">
+    <app-program-stage-custom-form-entry
+      [dataEntryForm]="params?.programStage?.dataEntryForm"
+      [programStageDataElements]="
+        params?.programStage?.programStageDataElements
+      "
+    ></app-program-stage-custom-form-entry>
   </div>
   <div
     *ngIf="

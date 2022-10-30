@@ -1,1 +1,8 @@
-<p>program-stage-custom-form-entry works!</p>
+<div>
+  <ngx-dhis2-custom-forms-entry
+    [htmlCustomForm]="dataEntryForm?.htmlCode"
+    [dataElements]="dataElements"
+    [formType]="'tracker'"
+    (onCustomFormInputChange)="onCustomFormInputChange($event)"
+  ></ngx-dhis2-custom-forms-entry>
+</div>

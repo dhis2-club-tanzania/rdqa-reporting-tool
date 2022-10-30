@@ -22,6 +22,6 @@ export class DataEntryFormContainerComponent implements OnInit {
   }
 
   onFormUpdate(formValue: FormValue): void {
-    console.log(formValue.getValues());
+    // console.log(formValue.getValues());
   }
 }
