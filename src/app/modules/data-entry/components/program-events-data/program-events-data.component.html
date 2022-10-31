@@ -1,0 +1,52 @@
+<div
+  *ngIf="{ trackedEntityInstances: trackedEntityInstances$ | async } as params"
+>
+  <mat-progress-bar
+    mode="indeterminate"
+    *ngIf="!params?.trackedEntityInstances"
+  ></mat-progress-bar>
+  <!-- {{ params?.trackedEntityInstances | json }} -->
+  <div class="mt-4">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th *ngFor="let header of params?.trackedEntityInstances?.headers">
+            {{ header?.column }}
+          </th>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let dataRow of params?.trackedEntityInstances?.data;
+            let count = index
+          "
+        >
+          <th>
+            {{ count + 1 }}
+          </th>
+          <td *ngFor="let header of params?.trackedEntityInstances?.headers">
+            {{ dataRow[header?.name] }}
+          </td>
+          <td>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button (click)="onEdit($event, dataRow)" mat-menu-item>
+                <mat-icon>edit</mat-icon>
+                <span>Edit</span>
+              </button>
+              <button (click)="onDelete($event, dataRow)" mat-menu-item>
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

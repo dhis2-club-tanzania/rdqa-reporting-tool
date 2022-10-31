@@ -210,7 +210,7 @@ function getDataValue(data, id) {
   return dataObject ? dataObject.value : '';
 }
 
-function getIndicatorsAndTheirValues() {
+function getIndicators() {
   let indicatorIds = [];
   const formIndicators = document.querySelectorAll("input[name='indicator']");
   if (formIndicators) {
@@ -509,7 +509,7 @@ export function onFormReady(
     }
   }
 
-  const indicatorIds = getIndicatorsAndTheirValues();
+  const indicatorIds = getIndicators();
 
   const returnedFormFuncObject = formReadyFunc(
     formType,

@@ -1,6 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProgramsListService } from 'src/app/core/services/programs-list.service';
+
+import { uniqBy } from 'lodash';
 
 @Component({
   selector: 'app-program-stage-entry',
@@ -22,6 +24,8 @@ export class ProgramStageEntryComponent implements OnInit {
   customFormData: any = [];
   period: string;
   shouldRerender: boolean = false;
+
+  @Output() formulatedPayload: EventEmitter<any> = new EventEmitter<any>();
   constructor(private programsListService: ProgramsListService) {}
 
   ngOnInit(): void {
@@ -31,6 +35,7 @@ export class ProgramStageEntryComponent implements OnInit {
   }
 
   onCaptureData(data: any): void {
+    console.log('data', data);
     this.currentFormData = { ...this.currentFormData, ...data };
     let requiredData = [];
     this.requiredElements?.map((elem) => {
@@ -59,14 +64,23 @@ export class ProgramStageEntryComponent implements OnInit {
       ? new Date(this.supervisionDate).getFullYear() +
         this.currentFormData['TWEmGyCIJsq']?.value
       : '';
-
     this.isVerificationFormReady = requiredData?.length >= 2;
   }
 
-  onGetCustomFormDataValues(values): void {
-    console.log(values);
-    Object.keys(values).forEach((key) => {
-      this.currentFormData = [...this.customFormData, values[key]];
+  onGetCustomFormDataValues(values: any): void {
+    // console.log('currentFormData', this.currentFormData);
+    this.currentFormData = { ...this.currentFormData, ...values };
+    Object.keys(this.currentFormData).forEach((key) => {
+      this.customFormData = [...this.customFormData, this.currentFormData[key]];
     });
+    this.customFormData = this.customFormData?.map((data) => {
+      return {
+        ...data,
+        id: data?.id?.split('-')[0],
+      };
+    });
+    let stageData = {};
+    stageData[this.programStage?.id] = uniqBy(this.customFormData, 'id');
+    this.formulatedPayload.emit(stageData);
   }
 }

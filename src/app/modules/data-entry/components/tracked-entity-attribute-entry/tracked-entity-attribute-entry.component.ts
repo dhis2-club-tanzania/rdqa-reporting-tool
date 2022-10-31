@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormValue } from 'src/app/shared/modules/forms/models/form-value.model';
 import { Textbox } from 'src/app/shared/modules/forms/models/text-box.model';
 
@@ -11,6 +11,9 @@ export class TrackedEntityAttributeEntryComponent implements OnInit {
   @Input() programTrackedEntityAttributes: any;
   @Input() orgUnitId: string;
   programTrackedEntityAttributesFields: any[];
+
+  @Output() trackedEntityAttributeValues: EventEmitter<any> =
+    new EventEmitter<any>();
   constructor() {}
 
   ngOnInit(): void {
@@ -26,6 +29,6 @@ export class TrackedEntityAttributeEntryComponent implements OnInit {
   }
 
   onFormUpdate(formValues: FormValue): void {
-    // console.log(formValues.getValues());
+    this.trackedEntityAttributeValues.emit(formValues.getValues());
   }
 }

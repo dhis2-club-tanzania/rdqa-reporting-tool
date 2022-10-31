@@ -1,5 +1,6 @@
 import { AggregateCustomFormEntryComponent } from './aggregate-custom-form-entry/aggregate-custom-form-entry.component';
 import { DataEntryFormContainerComponent } from './data-entry-form-container/data-entry-form-container.component';
+import { ProgramEventsDataComponent } from './program-events-data/program-events-data.component';
 import { ProgramStageCustomFormEntryComponent } from './program-stage-custom-form-entry/program-stage-custom-form-entry.component';
 import { ProgramStageEntryComponent } from './program-stage-entry/program-stage-entry.component';
 import { ProgramStageGeneralEntryComponent } from './program-stage-general-entry/program-stage-general-entry.component';
@@ -14,4 +15,5 @@ export const components: any[] = [
   ProgramStageGeneralEntryComponent,
   ProgramStageCustomFormEntryComponent,
   AggregateCustomFormEntryComponent,
+  ProgramEventsDataComponent,
 ];
