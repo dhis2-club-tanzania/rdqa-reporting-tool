@@ -9,12 +9,64 @@ import { ProgramsListService } from 'src/app/core/services/programs-list.service
 })
 export class ProgramStageEntryComponent implements OnInit {
   @Input() programStage: any;
+  @Input() supervisionDate: any;
+  @Input() reportingDate: any;
+  @Input() orgUnitId: string;
   programStage$: Observable<any>;
+  requiredElements: any[] = [
+    { id: 'AA4OYrWbh2U', name: 'Verification Level' },
+    { id: 'TWEmGyCIJsq', name: 'Evaluated Quarter' },
+  ];
+  currentFormData: any = {};
+  isVerificationFormReady: boolean = false;
+  customFormData: any = [];
+  period: string;
+  shouldRerender: boolean = false;
   constructor(private programsListService: ProgramsListService) {}
 
   ngOnInit(): void {
     this.programStage$ = this.programsListService.getProgramStageDetails(
       this.programStage?.id
     );
+  }
+
+  onCaptureData(data: any): void {
+    this.currentFormData = { ...this.currentFormData, ...data };
+    let requiredData = [];
+    this.requiredElements?.map((elem) => {
+      if (this.currentFormData[elem?.id]?.value !== '') {
+        requiredData = [
+          ...requiredData,
+          {
+            ...elem,
+            value: this.currentFormData[elem?.id]?.value,
+          },
+        ];
+      }
+    });
+    const changed =
+      this.currentFormData['TWEmGyCIJsq']?.value &&
+      this.period != this.currentFormData['TWEmGyCIJsq']?.value
+        ? true
+        : false;
+    if (changed) {
+      this.shouldRerender = false;
+      setTimeout(() => {
+        this.shouldRerender = true;
+      }, 200);
+    }
+    this.period = this.currentFormData['TWEmGyCIJsq']?.value
+      ? new Date(this.supervisionDate).getFullYear() +
+        this.currentFormData['TWEmGyCIJsq']?.value
+      : '';
+
+    this.isVerificationFormReady = requiredData?.length >= 2;
+  }
+
+  onGetCustomFormDataValues(values): void {
+    console.log(values);
+    Object.keys(values).forEach((key) => {
+      this.currentFormData = [...this.customFormData, values[key]];
+    });
   }
 }

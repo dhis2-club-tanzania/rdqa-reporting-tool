@@ -214,10 +214,8 @@ function getIndicatorsAndTheirValues() {
   let indicatorIds = [];
   const formIndicators = document.querySelectorAll("input[name='indicator']");
   if (formIndicators) {
-    console.log(formIndicators);
     formIndicators?.forEach((indElement) => {
       const id = indElement?.getAttribute('id')?.replace('indicator', '');
-      console.log(id);
       indicatorIds = [...indicatorIds, id];
     });
   }

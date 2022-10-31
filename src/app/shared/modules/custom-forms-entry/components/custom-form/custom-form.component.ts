@@ -35,6 +35,8 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() indicators: any;
   @Input() lastEvent: any;
   @Input() elementsToDisable: string[];
+  @Input() orgUnitId: string;
+  @Input() period: string;
   currentDataValues = {};
   _htmlMarkup: SafeHtml;
   entryFormStatusColors: any = {};
@@ -122,12 +124,11 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
         dataValues,
         indicatorIds?
       ) {
-        console.log('indicatorIds', indicatorIds);
         self.httpClient
           .get(
-            `analytics?dimension=dx:${indicatorIds?.join(
-              ','
-            )}&dimension=pe:2020&dimension=ou:CAWjYmd5Dea`
+            `analytics?dimension=dx:${indicatorIds?.join(',')}&dimension=pe:${
+              self.period
+            }&dimension=ou:${self?.orgUnitId}`
           )
           .subscribe((response) => {
             if (response) {

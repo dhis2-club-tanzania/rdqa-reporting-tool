@@ -4,12 +4,14 @@
     *ngIf="!params?.programStage"
   ></mat-progress-bar>
   <div
+    class="row"
     *ngIf="
       params?.programStage?.programStageSections &&
       params?.programStage?.programStageSections?.length > 0
     "
   >
     <div
+      class="col-md-3"
       *ngFor="
         let programStageSection of params?.programStage?.programStageSections;
         let count = index
@@ -22,23 +24,43 @@
         <div>
           <app-program-stage-section-entry
             [programStageSection]="programStageSection"
+            [currentFormData]="currentFormData"
+            (capturedData)="onCaptureData($event)"
           ></app-program-stage-section-entry>
         </div>
       </ng-container>
     </div>
   </div>
-  <div *ngIf="params?.programStage?.dataEntryForm">
+  <div
+    *ngIf="
+      params?.programStage?.dataEntryForm &&
+      isVerificationFormReady &&
+      shouldRerender
+    "
+  >
     <app-program-stage-custom-form-entry
       [dataEntryForm]="params?.programStage?.dataEntryForm"
       [programStageDataElements]="
         params?.programStage?.programStageDataElements
       "
+      [data]="currentFormData"
+      [orgUnitId]="orgUnitId"
+      [period]="period"
+      (customFormDataValues)="onGetCustomFormDataValues($event)"
     ></app-program-stage-custom-form-entry>
+  </div>
+  <div
+    *ngIf="params?.programStage?.dataEntryForm && !isVerificationFormReady"
+    class="alert alert-warning"
+    role="alert"
+  >
+    Please define required fields above
   </div>
   <div
     *ngIf="
       params?.programStage?.programStageSections &&
-      params?.programStage?.programStageSections?.length === 0
+      params?.programStage?.programStageSections?.length === 0 &&
+      isVerificationFormReady
     "
   >
     <app-program-stage-general-entry

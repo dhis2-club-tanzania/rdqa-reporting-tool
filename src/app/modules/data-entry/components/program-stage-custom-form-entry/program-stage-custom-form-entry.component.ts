@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-program-stage-custom-form-entry',
@@ -8,7 +8,12 @@ import { Component, Input, OnInit } from '@angular/core';
 export class ProgramStageCustomFormEntryComponent implements OnInit {
   @Input() dataEntryForm: any;
   @Input() programStageDataElements: any[];
+  @Input() data: any;
+  @Input() orgUnitId: string;
+  @Input() period: string;
   dataElements: any[] = [];
+  keyedDataValues: any = {};
+  @Output() customFormDataValues: EventEmitter<any> = new EventEmitter<any>();
   constructor() {}
 
   ngOnInit(): void {
@@ -22,7 +27,9 @@ export class ProgramStageCustomFormEntryComponent implements OnInit {
     );
   }
 
-  onCustomFormInputChange(event): void {
-    console.log(event);
+  getEnteredDataValues(values): void {
+    this.keyedDataValues = { ...this.keyedDataValues, ...values };
+    console.log(this.keyedDataValues);
+    this.customFormDataValues.emit(this.keyedDataValues);
   }
 }

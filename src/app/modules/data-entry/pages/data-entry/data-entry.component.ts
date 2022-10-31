@@ -18,6 +18,7 @@ export class DataEntryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.orgUnitId = this.route?.snapshot?.params['ou'];
     this.programId = this.route?.snapshot?.params['program'];
     this.program$ = this.programService.getProgramDetailsById(
       this.programId,

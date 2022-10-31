@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { element } from 'protractor';
 import { Dropdown } from 'src/app/shared/modules/forms/models/dropdown.model';
 import { FormValue } from 'src/app/shared/modules/forms/models/form-value.model';
@@ -11,10 +11,13 @@ import { Textbox } from 'src/app/shared/modules/forms/models/text-box.model';
 })
 export class ProgramStageSectionEntryComponent implements OnInit {
   @Input() programStageSection: any;
+  @Input() currentFormData: any;
   sectionElementsFields: any[];
+  @Output() capturedData: EventEmitter<any> = new EventEmitter<any>();
   constructor() {}
 
   ngOnInit(): void {
+    console.log(this.programStageSection);
     this.sectionElementsFields = this.programStageSection?.dataElements
       ?.map((element: any) => {
         return element?.valueType == 'TEXT' && !element?.optionSetValue
@@ -28,6 +31,7 @@ export class ProgramStageSectionEntryComponent implements OnInit {
               id: element?.id,
               key: element?.id,
               label: element?.name,
+              required: true,
               options: element?.optionSet?.options?.map((option) => {
                 return {
                   value: option?.code,
@@ -51,6 +55,10 @@ export class ProgramStageSectionEntryComponent implements OnInit {
   }
 
   onFormUpdate(formValue: FormValue): void {
-    // console.log(formValue.getValues());
+    this.currentFormData = {
+      ...this.currentFormData,
+      ...formValue.getValues(),
+    };
+    this.capturedData.emit(this.currentFormData);
   }
 }

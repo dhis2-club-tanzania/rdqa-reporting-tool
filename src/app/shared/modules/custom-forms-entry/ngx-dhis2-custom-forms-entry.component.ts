@@ -16,6 +16,8 @@ export class NgxDhis2CustomFormsEntryComponent implements OnInit {
   @Input() indicators: any;
   @Input() lastEvent: any;
   @Input() elementsToDisable: string[];
+  @Input() orgUnitId: string;
+  @Input() period: string;
   statusInfo: any;
   constructor() {}
 

@@ -1,8 +1,10 @@
 <div>
-  <ngx-dhis2-custom-forms-entry
-    [htmlCustomForm]="dataEntryForm?.htmlCode"
+  <app-aggregate-custom-form-entry
+    [dataEntryForm]="dataEntryForm"
     [dataElements]="dataElements"
-    [formType]="'tracker'"
-    (onCustomFormInputChange)="onCustomFormInputChange($event)"
-  ></ngx-dhis2-custom-forms-entry>
+    [orgUnitId]="orgUnitId"
+    [period]="period"
+    [keyedDataValues]="keyedDataValues"
+    (enteredDataValues)="getEnteredDataValues($event)"
+  ></app-aggregate-custom-form-entry>
 </div>

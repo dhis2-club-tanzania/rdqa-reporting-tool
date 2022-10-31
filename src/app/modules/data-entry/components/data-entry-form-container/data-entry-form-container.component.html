@@ -1,22 +1,27 @@
 <div class="p-2">
   <div class="w-25">
     <app-form
-      [fields]="[supervisionDateField]"
+      [fields]="reportFields"
+      [isFormHorizontal]="true"
       (formUpdate)="onFormUpdate($event)"
     ></app-form>
   </div>
   <app-tracked-entity-attribute-entry
     *ngIf="program?.programType == 'WITH_REGISTRATION'"
     [programTrackedEntityAttributes]="program?.programTrackedEntityAttributes"
+    [orgUnitId]="orgUnitId"
   ></app-tracked-entity-attribute-entry>
 
-  <div class="program-stages-entry">
+  <div class="program-stages-entry" *ngIf="isFormValid">
     <div class="w-100" *ngFor="let programStage of program?.programStages">
       <div class="h5" [id]="programStage?.id">
         {{ programStage?.name }}
       </div>
       <app-program-stage-entry
         [programStage]="programStage"
+        [supervisionDate]="supervisionDate"
+        [reportingDate]="reportingDate"
+        [orgUnitId]="orgUnitId"
       ></app-program-stage-entry>
     </div>
   </div>

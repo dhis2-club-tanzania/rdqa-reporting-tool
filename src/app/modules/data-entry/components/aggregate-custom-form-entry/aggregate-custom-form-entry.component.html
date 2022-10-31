@@ -1,0 +1,13 @@
+<div>
+  <ngx-dhis2-custom-forms-entry
+    [htmlCustomForm]="dataEntryForm?.htmlCode"
+    [dataElements]="dataElements"
+    [formType]="'event'"
+    [formId]="dataEntryForm?.id"
+    [orgUnitId]="orgUnitId"
+    [period]="period"
+    [elementsDataValues]="customFormDataValues"
+    (onCustomFormInputChange)="detailsOfTheChangedValue($event)"
+    [statusUpdateOnDomElement]="statusArr"
+  ></ngx-dhis2-custom-forms-entry>
+</div>

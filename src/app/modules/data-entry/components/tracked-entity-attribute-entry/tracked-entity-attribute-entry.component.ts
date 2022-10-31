@@ -9,14 +9,11 @@ import { Textbox } from 'src/app/shared/modules/forms/models/text-box.model';
 })
 export class TrackedEntityAttributeEntryComponent implements OnInit {
   @Input() programTrackedEntityAttributes: any;
+  @Input() orgUnitId: string;
   programTrackedEntityAttributesFields: any[];
   constructor() {}
 
   ngOnInit(): void {
-    console.log(
-      'programTrackedEntityAttributes',
-      this.programTrackedEntityAttributes
-    );
     this.programTrackedEntityAttributesFields =
       this.programTrackedEntityAttributes?.map((attribute) => {
         return new Textbox({
