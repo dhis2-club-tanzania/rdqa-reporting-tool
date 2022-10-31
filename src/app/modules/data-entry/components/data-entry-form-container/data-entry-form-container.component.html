@@ -1,5 +1,5 @@
 <div class="p-2">
-  <div class="w-25">
+  <div class="w-50">
     <app-form
       [fields]="reportFields"
       [isFormHorizontal]="true"
@@ -11,6 +11,18 @@
     [programTrackedEntityAttributes]="program?.programTrackedEntityAttributes"
     [orgUnitId]="orgUnitId"
   ></app-tracked-entity-attribute-entry>
+
+  <div
+    *ngIf="!isFormValid"
+    class="mt-4 mb-4"
+    style="margin-left: 35%; margin-right: 35%"
+  >
+    <mat-card>
+      <div class="p-4 alert alert-info" role="alert">
+        <p>Please define required fields</p>
+      </div>
+    </mat-card>
+  </div>
 
   <div class="program-stages-entry" *ngIf="isFormValid">
     <div class="w-100" *ngFor="let programStage of program?.programStages">
