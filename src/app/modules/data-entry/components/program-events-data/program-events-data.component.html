@@ -35,11 +35,19 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-              <button (click)="onEdit($event, dataRow)" mat-menu-item>
+              <button
+                [disabled]="true"
+                (click)="onEdit($event, dataRow)"
+                mat-menu-item
+              >
                 <mat-icon>edit</mat-icon>
                 <span>Edit</span>
               </button>
-              <button (click)="onDelete($event, dataRow)" mat-menu-item>
+              <button
+                [disabled]="true"
+                (click)="onDelete($event, dataRow)"
+                mat-menu-item
+              >
                 <mat-icon>delete</mat-icon>
                 <span>Delete</span>
               </button>
