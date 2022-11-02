@@ -10,7 +10,7 @@
       *ngIf="!params?.programs"
     ></mat-progress-bar>
     <div class="col-6 d-flex justify-content-left">
-      <mat-form-field class="w-100">
+      <mat-form-field class="w-100" *ngIf="params?.programs">
         <mat-label>Choose form</mat-label>
         <mat-select
           [(value)]="

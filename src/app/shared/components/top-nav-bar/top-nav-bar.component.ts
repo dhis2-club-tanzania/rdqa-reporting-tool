@@ -16,7 +16,11 @@ export class TopNavBarComponent implements OnInit {
   constructor(private programsListService: ProgramsListService) {}
 
   ngOnInit(): void {
-    this.programs$ = this.programsListService.getProgramsList();
+    // this.selectedForm = {
+    //   id: 'zRQV8FlMrIx',
+    //   name: 'Data Verification Supervision',
+    // };
+    this.programs$ = this.programsListService.getProgramsList(['zRQV8FlMrIx']);
     this.programs$.subscribe((programsList) => {
       if (programsList) {
         this.selectedProgramForm.emit(programsList[0]);
