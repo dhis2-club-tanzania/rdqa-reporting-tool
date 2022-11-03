@@ -126,7 +126,7 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
       ) {
         self.httpClient
           .get(
-            `analytics?dimension=dx:${indicatorIds?.join(',')}&dimension=pe:${
+            `analytics?dimension=dx:${indicatorIds?.join(';')}&dimension=pe:${
               self.period
             }&dimension=ou:${self?.orgUnitId}`
           )

@@ -315,7 +315,7 @@ export function onFormReady(
 
       if (formType == 'tracker' && !dataElementId) {
         dataElementId = elementId;
-        console.log('element id ', elementId, dataElementId);
+        // console.log('element id ', elementId, dataElementId);
         const dataElementDetails = dataElementObjects[dataElementId]
           ? dataElementObjects[dataElementId]
           : {};
@@ -537,7 +537,20 @@ export function onDataValueChange(
   indicatorValues: any
 ) {
   if (indicatorValues) {
-    console.log('indicatorValues', indicatorValues);
+    const formIndicators = document.querySelectorAll("input[name='indicator']");
+    if (formIndicators) {
+      formIndicators.forEach((indicator) => {
+        const id = indicator.getAttribute('id');
+        document
+          .getElementById(id)
+          .setAttribute(
+            'value',
+            indicatorValues[id?.replace('indicator', '')]
+              ? indicatorValues[id?.replace('indicator', '')]
+              : 0
+          );
+      });
+    }
   }
   // Get attribute from the element
   const elementId = element.getAttribute('id');
@@ -577,42 +590,6 @@ export function onDataValueChange(
   ) {
     const formIndicators = document.querySelectorAll("input[name='indicator']");
     if (formIndicators) {
-      formIndicators.forEach((indicator) => {
-        const formulaPattern = /#\{.+?\}/g;
-        let valuesObject = {};
-        indicators[indicator.id].expression
-          .match(formulaPattern)
-          .forEach((elem) => {
-            const inputValueElement: any = document.querySelector(
-              "input[id='" +
-                elem.replace(/[#\{\}]/g, '').replace('.', '-') +
-                '-val' +
-                "']"
-            );
-            const valueKey =
-              entryFormType && entryFormType === 'aggregate'
-                ? elem.replace('}', '').replace('#{', '')
-                : elem.split('.')[1].replace('}', '');
-            valuesObject[valueKey] =
-              inputValueElement && inputValueElement.value
-                ? inputValueElement.value
-                : 0;
-          });
-        const indValue = evaluateIndicatorExpression(
-          {
-            expression: indicators[indicator.id].expression,
-            left: indicators[indicator.id]?.left,
-            right: indicators[indicator.id]?.right,
-          },
-          valuesObject,
-          valuesObject,
-          entryFormType
-        );
-        const inputElement: any = document.querySelector(
-          "input[id='" + indicator.id + "']"
-        );
-        inputElement.value = indValue;
-      });
     }
   }
 
