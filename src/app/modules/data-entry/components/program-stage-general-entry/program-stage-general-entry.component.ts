@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormValue } from 'src/app/shared/modules/forms/models/form-value.model';
 import { TextArea } from 'src/app/shared/modules/forms/models/text-area.model';
 import { Textbox } from 'src/app/shared/modules/forms/models/text-box.model';
@@ -11,10 +11,11 @@ import { Textbox } from 'src/app/shared/modules/forms/models/text-box.model';
 export class ProgramStageGeneralEntryComponent implements OnInit {
   @Input() programStage: any;
   generalFormFields: any[];
+  @Input() currentFormData: any;
+  @Output() capturedData: EventEmitter<any> = new EventEmitter<any>();
   constructor() {}
 
   ngOnInit(): void {
-    console.log(this.programStage);
     this.generalFormFields = this.programStage?.programStageDataElements
       ?.map((stageDataElement) => {
         return stageDataElement?.dataElement?.valueType === 'LONG_TEXT' &&
@@ -31,5 +32,14 @@ export class ProgramStageGeneralEntryComponent implements OnInit {
     // console.log(this.generalFormFields);
   }
 
-  onFormUpdate(formValue: FormValue): void {}
+  onFormUpdate(formValue: FormValue): void {
+    this.currentFormData = {
+      ...this.currentFormData,
+      ...formValue.getValues(),
+    };
+    this.capturedData.emit({
+      stage: this.programStage,
+      data: this.currentFormData,
+    });
+  }
 }

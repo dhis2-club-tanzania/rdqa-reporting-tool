@@ -23,15 +23,17 @@
         </div>
         <div>
           <app-program-stage-section-entry
+            [programStage]="params?.programStage"
             [programStageSection]="programStageSection"
             [currentFormData]="currentFormData"
-            (capturedData)="onCaptureData($event)"
+            (capturedData)="onCaptureData($event, params?.programStage)"
           ></app-program-stage-section-entry>
         </div>
       </ng-container>
     </div>
   </div>
   <div
+    class="mt-2"
     *ngIf="
       params?.programStage?.dataEntryForm &&
       isVerificationFormReady &&
@@ -46,25 +48,29 @@
       [data]="currentFormData"
       [orgUnitId]="orgUnitId"
       [period]="period"
-      (customFormDataValues)="onGetCustomFormDataValues($event)"
+      (customFormDataValues)="
+        onGetCustomFormDataValues($event, params?.programStage)
+      "
     ></app-program-stage-custom-form-entry>
   </div>
   <div
     *ngIf="params?.programStage?.dataEntryForm && !isVerificationFormReady"
-    class="alert alert-warning"
+    class="alert alert-warning mt-2"
     role="alert"
   >
     Please define required fields above
   </div>
   <div
+    class="mt-2"
     *ngIf="
       params?.programStage?.programStageSections &&
-      params?.programStage?.programStageSections?.length === 0 &&
-      isVerificationFormReady
+      params?.programStage?.programStageSections?.length === 0
     "
   >
     <app-program-stage-general-entry
       [programStage]="params?.programStage"
+      [currentFormData]="currentFormData"
+      (capturedData)="onCaptureData($event, params?.programStage)"
     ></app-program-stage-general-entry>
   </div>
 </div>

@@ -21,6 +21,7 @@ export class DataEntryFormContainerComponent implements OnInit {
   category: string;
 
   trackedEntityAttributeValues: any;
+  capturedPayload: any = {};
   constructor(private dataService: DataServiceService) {}
 
   ngOnInit(): void {
@@ -74,6 +75,7 @@ export class DataEntryFormContainerComponent implements OnInit {
   }
 
   onGetFormulatedPayload(payload: any): void {
+    this.capturedPayload = { ...this.capturedPayload, ...payload };
     const enrollmentDetails = {
       trackedEntityType: this.program?.trackedEntityType?.id,
       orgUnit: this.orgUnitId,
@@ -85,13 +87,17 @@ export class DataEntryFormContainerComponent implements OnInit {
           status: 'COMPLETED',
           enrollmentDate: this.reportingDate,
           incidentDate: this.supervisionDate,
-          events: Object.keys(payload)?.map((programStage) => {
+          events: Object.keys(this.capturedPayload)?.map((programStage) => {
             return {
               program: this.program?.id,
               programStage: programStage,
               orgUnit: this.orgUnitId,
               eventDate: this.reportingDate,
-              dataValues: payload[programStage].map((valueData) => {
+              dataValues: (
+                this.capturedPayload[programStage]?.filter(
+                  (dataValue) => dataValue?.id && dataValue?.id != 'undefined'
+                ) || []
+              ).map((valueData) => {
                 return {
                   dataElement: valueData?.id,
                   value: valueData?.value,
