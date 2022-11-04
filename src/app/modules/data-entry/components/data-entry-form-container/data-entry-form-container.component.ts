@@ -74,10 +74,6 @@ export class DataEntryFormContainerComponent implements OnInit {
   }
 
   onGetFormulatedPayload(payload: any): void {
-    console.log(
-      'trackedEntityAttributeValues',
-      this.trackedEntityAttributeValues
-    );
     const enrollmentDetails = {
       trackedEntityType: this.program?.trackedEntityType?.id,
       orgUnit: this.orgUnitId,

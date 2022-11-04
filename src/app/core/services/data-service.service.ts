@@ -46,7 +46,6 @@ export class DataServiceService {
               response?.headers?.forEach((header, index) => {
                 data[header?.name] = row[index];
               });
-              console.log('DADD', data);
               return data;
             }),
           };

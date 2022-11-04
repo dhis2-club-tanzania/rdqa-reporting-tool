@@ -35,7 +35,6 @@ export class ProgramStageEntryComponent implements OnInit {
   }
 
   onCaptureData(data: any): void {
-    console.log('data', data);
     this.currentFormData = { ...this.currentFormData, ...data };
     let requiredData = [];
     this.requiredElements?.map((elem) => {

@@ -29,7 +29,6 @@ export class ProgramStageCustomFormEntryComponent implements OnInit {
 
   getEnteredDataValues(values): void {
     this.keyedDataValues = { ...this.keyedDataValues, ...values };
-    console.log(this.keyedDataValues);
     this.customFormDataValues.emit(this.keyedDataValues);
   }
 }

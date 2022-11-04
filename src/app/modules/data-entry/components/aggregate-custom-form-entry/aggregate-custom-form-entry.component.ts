@@ -24,13 +24,10 @@ export class AggregateCustomFormEntryComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log('INSIDE');
     this.customFormDataValues = {
       ...this.customFormDataValues,
       ...this.keyedDataValues,
     };
-    console.log('keyedDataValues', this.keyedDataValues);
-    console.log('customFormDataValues', this.customFormDataValues);
   }
 
   detailsOfTheChangedValue(data) {

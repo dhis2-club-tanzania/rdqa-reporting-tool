@@ -40,6 +40,7 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
   currentDataValues = {};
   _htmlMarkup: SafeHtml;
   entryFormStatusColors: any = {};
+  indicatorValues: any;
   constructor(
     private sanitizer: DomSanitizer,
     private httpClient: NgxDhis2HttpClientService
@@ -136,6 +137,7 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
               response?.rows?.forEach((row) => {
                 indicatorValues[row[0]] = row[3];
               });
+              self.indicatorValues = indicatorValues;
               onDataValueChange(
                 null,
                 entryFormType,
@@ -145,7 +147,7 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
                 lastEvent,
                 elementsToDisable,
                 dataValues,
-                indicatorValues
+                self.indicatorValues
               );
             }
           });
@@ -169,7 +171,7 @@ export class CustomFormComponent implements OnInit, AfterViewInit, OnChanges {
                 lastEvent,
                 elementsToDisable,
                 dataValues,
-                null
+                self.indicatorValues
               );
             }
             event.preventDefault();

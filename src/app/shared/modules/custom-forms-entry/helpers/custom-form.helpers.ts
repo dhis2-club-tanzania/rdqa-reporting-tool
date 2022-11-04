@@ -14,62 +14,90 @@ const reference = {
 
 let referenceDataValues = {};
 
-function evaluteDataElementsValues(lastEvent, reference, dataValues) {
+function evaluteDataElementsValues(
+  lastEvent,
+  reference,
+  dataValues,
+  indicatorValues?
+) {
   // get last event datavalue matching the keys
 
-  Object.keys(reference).forEach((key) => {
-    const lastEventDataValuesMatched = lastEvent
-      ? lastEvent?.dataValues.filter(
-          (dataValue) => dataValue?.dataElement === key
-        ) || []
-      : [];
-    if (lastEventDataValuesMatched && lastEventDataValuesMatched.length > 0) {
-      // console.log('last event', lastEvent);
-      // console.log('lastEventDataValuesMatched', lastEventDataValuesMatched);
-      // console.log('dataValues', dataValues);
-      let elementValues = {};
-      if (lastEvent && lastEvent?.dataValues) {
-        _.each(lastEvent.dataValues, (dataValue) => {
-          elementValues[dataValue.dataElement] = dataValue.value;
-        });
-      }
-      const value = evaluateIndicatorExpression(
-        reference[key],
-        elementValues,
-        dataValues
-      );
-      if (value) {
-        const elem: any = document.querySelector(
-          "input[id='" +
-            reference[key].stage +
-            '-' +
-            reference[key].elementToAssignValue +
-            "-val']"
-        );
-        if (elem) {
-          elem.value = value;
-          elem.setAttribute('disabled', 'disabled');
-          let colorKey = 'WAIT';
-
-          // create custom event for saving data values
-          const dataValueEvent = new CustomEvent('dataValueUpdate', {
-            detail: {
-              id: `${reference[key].elementToAssignValue}-dataElement`,
-              value: value,
-              status: 'not-synced',
-              domElementId:
-                reference[key].stage +
-                '-' +
-                reference[key].elementToAssignValue +
-                '-val',
-              colorKey: colorKey,
-            },
-          });
-          document.body.dispatchEvent(dataValueEvent);
+  if (indicatorValues) {
+    const matchingInputs = document.querySelectorAll(
+      "input[name='matching-status']"
+    );
+    matchingInputs.forEach((input) => {
+      const id = input.getAttribute('id');
+      if (id) {
+        const elemeId = id.split('-')[1];
+        const indicatorId = id.split('-')[0];
+        if (indicatorId && elemeId) {
+          const indicatorValue = Number(indicatorValues[indicatorId]);
+          const elementValue = Number(dataValues[elemeId]);
+          if (indicatorValue == elementValue) {
+            input.setAttribute('style', 'background-color: #126a12d9');
+          } else if (indicatorValue != elementValue) {
+            input.setAttribute('style', 'background-color: #de2626d6');
+          }
         }
       }
-    }
-  });
+    });
+    document.getElementsByTagName('');
+  } else {
+    Object.keys(reference).forEach((key) => {
+      const lastEventDataValuesMatched = lastEvent
+        ? lastEvent?.dataValues.filter(
+            (dataValue) => dataValue?.dataElement === key
+          ) || []
+        : [];
+      if (lastEventDataValuesMatched && lastEventDataValuesMatched.length > 0) {
+        // console.log('last event', lastEvent);
+        // console.log('lastEventDataValuesMatched', lastEventDataValuesMatched);
+        // console.log('dataValues', dataValues);
+        let elementValues = {};
+        if (lastEvent && lastEvent?.dataValues) {
+          _.each(lastEvent.dataValues, (dataValue) => {
+            elementValues[dataValue.dataElement] = dataValue.value;
+          });
+        }
+        const value = evaluateIndicatorExpression(
+          reference[key],
+          elementValues,
+          dataValues
+        );
+        if (value) {
+          const elem: any = document.querySelector(
+            "input[id='" +
+              reference[key].stage +
+              '-' +
+              reference[key].elementToAssignValue +
+              "-val']"
+          );
+          if (elem) {
+            elem.value = value;
+            elem.setAttribute('disabled', 'disabled');
+            let colorKey = 'WAIT';
+
+            // create custom event for saving data values
+            const dataValueEvent = new CustomEvent('dataValueUpdate', {
+              detail: {
+                id: `${reference[key].elementToAssignValue}-dataElement`,
+                value: value,
+                status: 'not-synced',
+                domElementId:
+                  reference[key].stage +
+                  '-' +
+                  reference[key].elementToAssignValue +
+                  '-val',
+                colorKey: colorKey,
+              },
+            });
+            document.body.dispatchEvent(dataValueEvent);
+          }
+        }
+      }
+    });
+  }
 }
 
 function getSanitizedValue(value, type) {
@@ -541,14 +569,16 @@ export function onDataValueChange(
     if (formIndicators) {
       formIndicators.forEach((indicator) => {
         const id = indicator.getAttribute('id');
-        document
-          .getElementById(id)
-          .setAttribute(
-            'value',
-            indicatorValues[id?.replace('indicator', '')]
-              ? indicatorValues[id?.replace('indicator', '')]
-              : 0
-          );
+        if (id) {
+          document
+            .getElementById(id)
+            .setAttribute(
+              'value',
+              indicatorValues[id?.replace('indicator', '')]
+                ? indicatorValues[id?.replace('indicator', '')]
+                : 0
+            );
+        }
       });
     }
   }
@@ -594,7 +624,12 @@ export function onDataValueChange(
   }
 
   setTimeout(() => {
-    evaluteDataElementsValues(lastEvent, reference, referenceDataValues);
+    evaluteDataElementsValues(
+      lastEvent,
+      reference,
+      referenceDataValues,
+      indicatorValues
+    );
   }, 1500);
 }
 

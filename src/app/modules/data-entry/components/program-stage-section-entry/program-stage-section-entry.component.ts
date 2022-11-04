@@ -17,7 +17,6 @@ export class ProgramStageSectionEntryComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log(this.programStageSection);
     this.sectionElementsFields = this.programStageSection?.dataElements
       ?.map((element: any) => {
         return element?.valueType == 'TEXT' && !element?.optionSetValue
