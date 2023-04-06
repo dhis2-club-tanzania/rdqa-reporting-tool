@@ -6,7 +6,7 @@ import { Fn } from '@iapps/function-analytics';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   constructor(
@@ -20,11 +20,11 @@ export class AppComponent {
     this.translate.use('en');
 
     // Set application title
-    this.setTitle('Seed application');
+    this.setTitle('RDQA Reporting');
 
     if (Fn) {
       Fn.init({
-        baseUrl: '../../../'
+        baseUrl: '../../../',
       });
     }
   }

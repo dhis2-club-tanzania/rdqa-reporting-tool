@@ -1,0 +1,10 @@
+<div>
+  <app-aggregate-custom-form-entry
+    [dataEntryForm]="dataEntryForm"
+    [dataElements]="dataElements"
+    [orgUnitId]="orgUnitId"
+    [period]="period"
+    [keyedDataValues]="keyedDataValues"
+    (enteredDataValues)="getEnteredDataValues($event)"
+  ></app-aggregate-custom-form-entry>
+</div>

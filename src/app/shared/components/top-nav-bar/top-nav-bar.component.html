@@ -1,0 +1,37 @@
+<div class="p-3">
+  <div
+    class="row"
+    *ngIf="{
+      programs: programs$ | async
+    } as params"
+  >
+    <mat-progress-bar
+      mode="indeterminate"
+      *ngIf="!params?.programs"
+    ></mat-progress-bar>
+    <div class="col-6 d-flex justify-content-left">
+      <mat-form-field class="w-100" *ngIf="params?.programs">
+        <mat-label>Choose form</mat-label>
+        <mat-select
+          [(value)]="
+            selectedForm
+              ? selectedForm
+              : params?.programs && params?.programs?.length > 0
+              ? params?.programs[0]
+              : selectedForm
+          "
+          (selectionChange)="onSetSelectedValue($event)"
+        >
+          <mat-option
+            [value]="program"
+            *ngFor="let program of params?.programs; let count = index"
+            >{{ program?.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-6 d-flex justify-content-end">
+      <!-- {{ selectedForm | json }} -->
+    </div>
+  </div>
+</div>

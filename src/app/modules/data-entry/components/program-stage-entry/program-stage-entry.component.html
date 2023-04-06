@@ -1,0 +1,76 @@
+<div class="p-3" *ngIf="{ programStage: programStage$ | async } as params">
+  <mat-progress-bar
+    mode="indeterminate"
+    *ngIf="!params?.programStage"
+  ></mat-progress-bar>
+  <div
+    class="row"
+    *ngIf="
+      params?.programStage?.programStageSections &&
+      params?.programStage?.programStageSections?.length > 0
+    "
+  >
+    <div
+      class="col-md-3"
+      *ngFor="
+        let programStageSection of params?.programStage?.programStageSections;
+        let count = index
+      "
+    >
+      <ng-container *ngIf="count < 2">
+        <div class="h5">
+          {{ programStageSection?.name }}
+        </div>
+        <div>
+          <app-program-stage-section-entry
+            [programStage]="params?.programStage"
+            [programStageSection]="programStageSection"
+            [currentFormData]="currentFormData"
+            (capturedData)="onCaptureData($event, params?.programStage)"
+          ></app-program-stage-section-entry>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div
+    class="mt-2"
+    *ngIf="
+      params?.programStage?.dataEntryForm &&
+      isVerificationFormReady &&
+      shouldRerender
+    "
+  >
+    <app-program-stage-custom-form-entry
+      [dataEntryForm]="params?.programStage?.dataEntryForm"
+      [programStageDataElements]="
+        params?.programStage?.programStageDataElements
+      "
+      [data]="currentFormData"
+      [orgUnitId]="orgUnitId"
+      [period]="period"
+      (customFormDataValues)="
+        onGetCustomFormDataValues($event, params?.programStage)
+      "
+    ></app-program-stage-custom-form-entry>
+  </div>
+  <div
+    *ngIf="params?.programStage?.dataEntryForm && !isVerificationFormReady"
+    class="alert alert-warning mt-2"
+    role="alert"
+  >
+    Please define required fields above
+  </div>
+  <div
+    class="mt-2"
+    *ngIf="
+      params?.programStage?.programStageSections &&
+      params?.programStage?.programStageSections?.length === 0
+    "
+  >
+    <app-program-stage-general-entry
+      [programStage]="params?.programStage"
+      [currentFormData]="currentFormData"
+      (capturedData)="onCaptureData($event, params?.programStage)"
+    ></app-program-stage-general-entry>
+  </div>
+</div>
