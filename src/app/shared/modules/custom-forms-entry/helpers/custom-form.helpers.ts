@@ -32,11 +32,12 @@ function evaluteDataElementsValues(
         const elemeId = id.split('-')[1];
         const indicatorId = id.split('-')[0];
         if (indicatorId && elemeId) {
-          const indicatorValue = Number(indicatorValues[indicatorId]);
+          const indicatorValue = Number(indicatorValues[indicatorId]) || 0;
           const elementValue = Number(dataValues[elemeId]);
-          if (indicatorValue == elementValue) {
+
+          if (indicatorValue === elementValue) {
             input.setAttribute('style', 'background-color: #126a12d9');
-          } else if (indicatorValue != elementValue) {
+          } else if (indicatorValue !== elementValue && elementValue) {
             input.setAttribute('style', 'background-color: #de2626d6');
           }
         }
