@@ -102,7 +102,12 @@ export function generatePeriodsFormDataVerificationPeriodTypeAndSupervisionDate(
               ).toString()
             ),
           elementId: verificationPeriodElemId,
-          valueKey: year + (month - count <= 0 ? -1 : 0) + (count + 1),
+          valueKey: doubleChars(
+            (month - count > 0
+              ? month - count
+              : 12 + (month - count)
+            ).toString()
+          ),
           name:
             year +
             (month - count <= 0 ? -1 : 0) +
