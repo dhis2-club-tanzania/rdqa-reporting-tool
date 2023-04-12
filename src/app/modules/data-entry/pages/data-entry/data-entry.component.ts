@@ -22,7 +22,7 @@ export class DataEntryComponent implements OnInit {
     this.programId = this.route?.snapshot?.params['program'];
     this.program$ = this.programService.getProgramDetailsById(
       this.programId,
-      'id,name,sharing,trackedEntityType[id,name],displayEnrollmentDateLabel,programTrackedEntityAttributes[id,name,mandatory,valueType,trackedEntityAttribute[id,name,optionSets[id,name,options[id,name,code]]]],programIndicators[id,name,aggregationType,decimals],programType,displayIncidentDate,onlyEnrollOnce,programStages[id,name,programStageDataElements[id,dataElement[id,name,dataType]]]'
+      'id,name,sharing,trackedEntityType[id,name],displayEnrollmentDateLabel,programTrackedEntityAttributes[id,name,mandatory,valueType,trackedEntityAttribute[id,name,optionSets[id,name,options[id,name,code]]]],programIndicators[id,name,aggregationType,decimals],programType,displayIncidentDate,onlyEnrollOnce,programStages[id,name,programStageDataElements[id,dataElement[id,name,dataType,attributeValues]]]'
     );
   }
 }

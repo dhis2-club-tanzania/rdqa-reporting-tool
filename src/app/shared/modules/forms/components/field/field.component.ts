@@ -33,6 +33,7 @@ export class FieldComponent {
   @Input() isCheckBoxButton: boolean;
   @Input() fieldClass: string;
   @Input() shouldDisable: boolean;
+  @Input() width: string;
   members$: Observable<any[]> = of([]);
 
   constructor(private formService: FormService) {}

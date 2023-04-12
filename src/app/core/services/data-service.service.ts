@@ -52,4 +52,16 @@ export class DataServiceService {
         })
       );
   }
+
+  getAnalyticsData(
+    indicatorIds: string[],
+    period: string,
+    orgUnitId: string
+  ): Observable<any> {
+    return this.httpClient.get(
+      `analytics?dimension=dx:${indicatorIds?.join(
+        ';'
+      )}&dimension=pe:${period}&dimension=ou:${orgUnitId}`
+    );
+  }
 }

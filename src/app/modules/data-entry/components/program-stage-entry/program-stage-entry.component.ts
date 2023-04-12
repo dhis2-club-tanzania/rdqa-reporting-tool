@@ -1,8 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, zip } from 'rxjs';
 import { ProgramsListService } from 'src/app/core/services/programs-list.service';
 
-import { uniqBy } from 'lodash';
+import { uniqBy, keyBy } from 'lodash';
+import { generatePeriodsFormDataVerificationPeriodTypeAndSupervisionDate } from 'src/app/core/helpers/date-formatting.helpers';
+import { Dropdown } from 'src/app/shared/modules/forms/models/dropdown.model';
+import { FormValue } from 'src/app/shared/modules/forms/models/form-value.model';
+import { DataServiceService } from 'src/app/core/services/data-service.service';
+import { calculateVariance } from 'src/app/core/helpers/maths-calculations.helper';
 
 @Component({
   selector: 'app-program-stage-entry',
@@ -26,18 +31,77 @@ export class ProgramStageEntryComponent implements OnInit {
   period: string;
   shouldRerender: boolean = false;
   stageKeyedData: any = {};
+  periodsToFeedData = [];
+  currentYear: number = new Date().getFullYear();
+  yearlyFormField: any;
+  dataDetails: any;
+  indicatorsData: any = {};
+  paperToolsData: any = {};
 
   @Output() formulatedPayload: EventEmitter<any> = new EventEmitter<any>();
-  constructor(private programsListService: ProgramsListService) {}
+  @Output() paperReviewedData: EventEmitter<any> = new EventEmitter<any>();
+  @Output() selectedPeriods: EventEmitter<any[]> = new EventEmitter<any[]>();
+  constructor(
+    private programsListService: ProgramsListService,
+    private dataService: DataServiceService
+  ) {}
 
   ngOnInit(): void {
     this.programStage$ = this.programsListService.getProgramStageDetails(
       this.programStage?.id
     );
+    this.currentYear = new Date(this.supervisionDate).getFullYear();
+    let years = [];
+    for (let count = 0; count < 5; count++) {
+      years = [...years, new Date().getFullYear() - count];
+    }
+    this.yearlyFormField = new Dropdown({
+      id: 'year',
+      key: 'year',
+      label: 'Year',
+      options:
+        years.map((year) => {
+          return {
+            id: year,
+            key: year,
+            value: year,
+            label: year,
+          };
+        }) || [],
+    });
+  }
+
+  onFormUpdate(formValue: FormValue, programStage: any): void {
+    this.currentYear = Number(formValue.getValues()?.year?.value);
+    this.onCaptureData(this.dataDetails, programStage);
   }
 
   onCaptureData(dataDetails: any, programStage: any): void {
+    this.dataDetails = dataDetails;
     const data = dataDetails?.data;
+    // console.log('BGY2qYFRNdj', dataDetails);
+    if (dataDetails?.data['BGY2qYFRNdj'] && dataDetails?.data['TWEmGyCIJsq']) {
+      this.periodsToFeedData = [];
+      setTimeout(() => {
+        const periods =
+          generatePeriodsFormDataVerificationPeriodTypeAndSupervisionDate(
+            dataDetails?.data['BGY2qYFRNdj']?.value,
+            dataDetails?.data['TWEmGyCIJsq']?.value,
+            this.supervisionDate,
+            this.currentYear,
+            'TWEmGyCIJsq'
+          );
+        // console.log('periods', periods);
+        this.periodsToFeedData = periods;
+        this.selectedPeriods.emit(periods);
+        this.getDataForEachIndicatorForSelectedPeriods(
+          periods,
+          programStage?.programStageDataElements?.map(
+            (programStageDataElement) => programStageDataElement?.dataElement
+          )
+        );
+      }, 50);
+    }
     this.currentStageFormData = { ...this.currentStageFormData, ...data };
     let requiredData = [];
     this.requiredElements?.map((elem) => {
@@ -96,5 +160,94 @@ export class ProgramStageEntryComponent implements OnInit {
     });
     this.stageKeyedData[programStage?.id] = uniqBy(this.customFormData, 'id');
     this.formulatedPayload.emit(this.stageKeyedData);
+  }
+
+  getDataForEachIndicatorForSelectedPeriods(
+    periods: any[],
+    dataElements: any[]
+  ): void {
+    const indicators = dataElements?.map((element) => {
+      return {
+        ...element,
+        elementId: element?.id,
+        indicatorId: (element?.attributeValues?.filter(
+          (attributeValue) => attributeValue?.attribute?.id === 'B5uRdqhgMQQ'
+        ) || [])[0]?.value,
+      };
+    });
+    const elementsKeyedByIndicator = keyBy(indicators, 'indicatorId');
+    // console.log(indicators);
+    zip(
+      ...periods.map((pe) =>
+        this.dataService.getAnalyticsData(
+          indicators?.map((ind) => ind?.indicatorId) || [],
+          pe?.id,
+          this.orgUnitId
+        )
+      )
+    ).subscribe((dataResponse) => {
+      dataResponse?.forEach((response) => {
+        if (response?.rows?.length > 0) {
+          response?.rows?.forEach((row) => {
+            this.indicatorsData[
+              elementsKeyedByIndicator[row[0]].elementId + '-' + row[1]
+            ] = {
+              value: row[3],
+              indicatorId: row[0],
+              dataElement: elementsKeyedByIndicator[row[0]],
+            };
+          });
+        }
+      });
+    });
+  }
+
+  getData(
+    event: Event,
+    elementId: string,
+    period: any,
+    indicatorsData: any
+  ): void {
+    const key = elementId + '-' + period?.id;
+    const val = (event?.target as HTMLInputElement)?.value;
+    this.paperToolsData[key] = {
+      value: val,
+      elementId: elementId,
+      period,
+    };
+    this.paperReviewedData.emit(this.paperToolsData);
+    this.formulatedPayload.emit(this.stageKeyedData);
+    Object.keys(this.paperToolsData).forEach((key) => {
+      const numbers = [
+        Number(indicatorsData[key]?.value),
+        Number(this.paperToolsData[key]?.value),
+      ];
+      const yesNoElem = document.getElementById(key + 'yes-no');
+      if (
+        Number(indicatorsData[key]?.value) ===
+        Number(this.paperToolsData[key]?.value)
+      ) {
+        if (yesNoElem) {
+          yesNoElem.innerText = 'YES';
+        } else {
+          yesNoElem.innerText = '';
+        }
+      } else {
+        if (yesNoElem) {
+          yesNoElem.innerText = 'NO';
+        } else {
+          yesNoElem.innerText = '';
+        }
+      }
+
+      const variance = calculateVariance(numbers);
+
+      const varianceElem = document.getElementById(key + 'variance');
+      if (varianceElem) {
+        varianceElem.innerText = !isNaN(variance) ? variance.toString() : '-';
+      } else {
+        varianceElem.innerText = '';
+      }
+    });
   }
 }

@@ -21,18 +21,179 @@
         <div class="h5">
           {{ programStageSection?.name }}
         </div>
-        <div>
+        <div class="d-flex justify-content-left">
           <app-program-stage-section-entry
             [programStage]="params?.programStage"
             [programStageSection]="programStageSection"
             [currentFormData]="currentFormData"
             (capturedData)="onCaptureData($event, params?.programStage)"
           ></app-program-stage-section-entry>
+          <app-form
+            *ngIf="count === 1"
+            [fields]="[yearlyFormField]"
+            (formUpdate)="onFormUpdate($event, params?.programStage)"
+          ></app-form>
         </div>
       </ng-container>
     </div>
   </div>
-  <div
+  <div class="row">
+    <div
+      class="col-md-12"
+      *ngFor="
+        let stageSection of params?.programStage?.programStageSections;
+        let stageCount = index
+      "
+    >
+      <ng-container
+        *ngIf="
+          stageCount > 1 && periodsToFeedData && periodsToFeedData?.length > 0
+        "
+      >
+        <div class="row">
+          <div class="col-12">
+            <b>
+              {{ stageSection?.name }}
+            </b>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-12" style="overflow: auto">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th rowspan="2" style="width: 20px">SN</th>
+                  <th rowspan="2" style="width: 30%">Indicator</th>
+                  <th
+                    class="text-center"
+                    colspan="4"
+                    [ngStyle]="{
+                      width:
+                        periodsToFeedData?.length <= 4
+                          ? '12% !important'
+                          : '4% !important'
+                    }"
+                    *ngFor="let period of periodsToFeedData"
+                  >
+                    {{ period?.name }}
+                  </th>
+                  <th></th>
+                </tr>
+                <tr>
+                  <ng-container *ngFor="let period of periodsToFeedData">
+                    <th
+                      class="text-center"
+                      [ngStyle]="{
+                        width:
+                          periodsToFeedData?.length <= 4
+                            ? '3% !important'
+                            : '1% !important'
+                      }"
+                    >
+                      System
+                    </th>
+                    <th
+                      class="text-center"
+                      [ngStyle]="{
+                        width:
+                          periodsToFeedData?.length <= 4
+                            ? '3% !important'
+                            : '1% !important'
+                      }"
+                    >
+                      Paper Tool
+                    </th>
+                    <th
+                      class="text-center"
+                      [ngStyle]="{
+                        width:
+                          periodsToFeedData?.length <= 4
+                            ? '3% !important'
+                            : '1% !important'
+                      }"
+                    >
+                      Yes/No
+                    </th>
+                    <th
+                      class="text-center"
+                      [ngStyle]="{
+                        width:
+                          periodsToFeedData?.length <= 4
+                            ? '3% !important'
+                            : '1% !important'
+                      }"
+                    >
+                      Variance
+                    </th>
+                  </ng-container>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let dataElement of stageSection['dataElements'];
+                    let c = index
+                  "
+                >
+                  <td>
+                    {{ c + 1 }}
+                  </td>
+                  <td>
+                    {{ dataElement?.name }}
+                  </td>
+                  <ng-container *ngFor="let period of periodsToFeedData">
+                    <td>
+                      {{
+                        indicatorsData[dataElement?.id + '-' + period?.id]
+                          ?.value
+                      }}
+                    </td>
+                    <td style="padding: 4px">
+                      <!-- <app-data-entry-input
+                        [period]="period"
+                        [width]="'w-50'"
+                        [elementId]="dataElement?.id"
+                      ></app-data-entry-input> -->
+                      <input
+                        style="
+                          width: 70px;
+                          text-align: center;
+                          padding: 6px;
+                          border: solid 1px #b7b7b7;
+                          border-radius: 3px;
+                        "
+                        type="number"
+                        min="0"
+                        required
+                        (change)="
+                          getData(
+                            $event,
+                            dataElement?.id,
+                            period,
+                            indicatorsData
+                          )
+                        "
+                      />
+                    </td>
+                    <td
+                      [id]="dataElement?.id + '-' + period?.id + 'yes-no'"
+                    ></td>
+                    <td
+                      [id]="dataElement?.id + '-' + period?.id + 'variance'"
+                    ></td>
+                  </ng-container>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- <div
     class="mt-2"
     *ngIf="
       params?.programStage?.dataEntryForm &&
@@ -52,7 +213,7 @@
         onGetCustomFormDataValues($event, params?.programStage)
       "
     ></app-program-stage-custom-form-entry>
-  </div>
+  </div> -->
   <div
     *ngIf="params?.programStage?.dataEntryForm && !isVerificationFormReady"
     class="alert alert-warning mt-2"

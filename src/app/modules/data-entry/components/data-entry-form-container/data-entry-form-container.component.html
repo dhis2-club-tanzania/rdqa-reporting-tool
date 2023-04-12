@@ -67,11 +67,13 @@
           [reportingDate]="reportingDate"
           [orgUnitId]="orgUnitId"
           (formulatedPayload)="onGetFormulatedPayload($event)"
+          (paperReviewedData)="onGetPaperReviewedData($event)"
+          (selectedPeriods)="onGetSelectedPeriods($event)"
         ></app-program-stage-entry>
       </div>
     </div>
 
-    <div class="w-100 d-flex justify-content-left" *ngIf="payloadToSave">
+    <div class="w-100 d-flex justify-content-left" *ngIf="payloadsToSave">
       <button [disabled]="true" mat-stroked-button (click)="onCancel($event)">
         Cancel
       </button>
@@ -79,7 +81,7 @@
         mat-flat-button
         class="ml-2"
         color="primary"
-        (click)="onSave($event, payloadToSave)"
+        (click)="onSave($event, payloadsToSave)"
       >
         Save
       </button>
