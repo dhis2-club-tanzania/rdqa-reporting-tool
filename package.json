@@ -27,6 +27,7 @@
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
     "@angular/service-worker": "^14.1.0",
+    "@iapps/dhis2-program-rule-engine": "^1.0.0-alpha.9",
     "@iapps/function-analytics": "^1.0.0-beta.24",
     "@iapps/ngx-dhis2-data-filter": "^1.0.0-beta.21",
     "@iapps/ngx-dhis2-http-client": "^2.0.8",
