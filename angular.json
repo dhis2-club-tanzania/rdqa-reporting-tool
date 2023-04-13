@@ -117,9 +117,10 @@
       }
     }
   },
-  "defaultProject": "rdqa-reporting",
   "cli": {
     "analytics": "542a320c-8705-4503-b91b-79ffabc8f703",
-    "defaultCollection": "@ngrx/schematics"
+    "schematicCollections": [
+      "@ngrx/schematics"
+    ]
   }
 }
