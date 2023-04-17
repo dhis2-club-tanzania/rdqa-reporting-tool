@@ -12,6 +12,7 @@ export class ProgramStageGeneralEntryComponent implements OnInit {
   @Input() programStage: any;
   generalFormFields: any[];
   @Input() currentFormData: any;
+  @Input() programRules: any[];
   @Output() capturedData: EventEmitter<any> = new EventEmitter<any>();
   constructor() {}
 

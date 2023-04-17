@@ -124,7 +124,7 @@ export function generatePeriodsFormDataVerificationPeriodTypeAndSupervisionDate(
   } else {
     periods = [];
   }
-  console.log('pers', periods);
+  // console.log('pers', periods);
   return periods;
 }
 

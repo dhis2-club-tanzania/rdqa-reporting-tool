@@ -10,6 +10,7 @@ import { Textbox } from 'src/app/shared/modules/forms/models/text-box.model';
 export class TrackedEntityAttributeEntryComponent implements OnInit {
   @Input() programTrackedEntityAttributes: any;
   @Input() orgUnitId: string;
+  @Input() programRules: any[];
   programTrackedEntityAttributesFields: any[];
 
   @Output() trackedEntityAttributeValues: EventEmitter<any> =

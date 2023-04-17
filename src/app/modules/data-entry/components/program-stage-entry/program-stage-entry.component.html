@@ -17,7 +17,7 @@
         let count = index
       "
     >
-      <ng-container *ngIf="count < 2">
+      <ng-container *ngIf="count < 1">
         <div class="h5">
           {{ programStageSection?.name }}
         </div>
@@ -25,11 +25,19 @@
           <app-program-stage-section-entry
             [programStage]="params?.programStage"
             [programStageSection]="programStageSection"
-            [currentFormData]="currentFormData"
+            [programRules]="programRules"
+            [programId]="programId"
+            [programRuleActions]="programRuleActions"
+            [programRuleVariables]="programRuleVariables"
+            [currentFormData]="formData[params?.programStage?.id] || {}"
+            [itemsToHide]="itemsToHide"
             (capturedData)="onCaptureData($event, params?.programStage)"
+            (programRulesActionsResults)="
+              onGetProgramRulesActionsResults($event)
+            "
           ></app-program-stage-section-entry>
           <app-form
-            *ngIf="count === 1"
+            *ngIf="count === 0"
             [fields]="[yearlyFormField]"
             (formUpdate)="onFormUpdate($event, params?.programStage)"
           ></app-form>
@@ -47,13 +55,17 @@
     >
       <ng-container
         *ngIf="
-          stageCount > 1 && periodsToFeedData && periodsToFeedData?.length > 0
+          stageCount > 0 &&
+          periodsToFeedData &&
+          periodsToFeedData?.length > 0 &&
+          !itemsToHide[stageSection?.id]
         "
       >
         <div class="row">
           <div class="col-12">
             <b>
-              {{ stageSection?.name }}
+              {{ stageSection?.name }} - {{ stageSection?.id }} -
+              {{ stageSection?.id }}
             </b>
           </div>
         </div>
@@ -230,6 +242,7 @@
   >
     <app-program-stage-general-entry
       [programStage]="params?.programStage"
+      [programRules]="programRules"
       [currentFormData]="currentFormData"
       (capturedData)="onCaptureData($event, params?.programStage)"
     ></app-program-stage-general-entry>

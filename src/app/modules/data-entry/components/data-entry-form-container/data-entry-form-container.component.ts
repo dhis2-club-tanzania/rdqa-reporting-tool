@@ -12,6 +12,9 @@ import { flatten } from 'lodash';
 export class DataEntryFormContainerComponent implements OnInit {
   @Input() program: any;
   @Input() orgUnitId: string;
+  @Input() programRules: any[];
+  @Input() programRuleActions: any[];
+  @Input() programRuleVariables: any[];
   reportFields: any[];
   isFormValid: boolean;
   supervisionDate: any;
@@ -25,6 +28,7 @@ export class DataEntryFormContainerComponent implements OnInit {
   capturedPayload: any = {};
   reviewedData: any = {};
   selectedPeriods: any[] = [];
+  formData: any = {};
   constructor(private dataService: DataServiceService) {}
 
   ngOnInit(): void {
@@ -45,6 +49,7 @@ export class DataEntryFormContainerComponent implements OnInit {
         max: new Date(),
       }),
     ];
+    this.programRuleVariables = this.program?.programRuleVariables;
   }
 
   onGetTrackedEntityAttributeValues(values: any): void {
@@ -58,9 +63,26 @@ export class DataEntryFormContainerComponent implements OnInit {
 
   onFormUpdate(formValue: FormValue): void {
     // console.log(formValue.getValues());
-    this.supervisionDate = formValue.getValues()?.supervisionDate?.value;
-    this.reportingDate = formValue.getValues()?.reportingDate?.value;
-    this.isFormValid = formValue.isValid;
+    if (
+      (this.supervisionDate || this.reportingDate) &&
+      (this.supervisionDate != formValue.getValues()?.supervisionDate?.value ||
+        this.reportingDate != formValue.getValues()?.reportingDate?.value)
+    ) {
+      this.supervisionDate = null;
+      setTimeout(() => {
+        this.supervisionDate = formValue.getValues()?.supervisionDate?.value;
+        this.reportingDate = formValue.getValues()?.reportingDate?.value;
+        this.isFormValid = formValue.isValid;
+      }, 100);
+    } else {
+      this.supervisionDate = formValue.getValues()?.supervisionDate?.value;
+      this.reportingDate = formValue.getValues()?.reportingDate?.value;
+      this.isFormValid = formValue.isValid;
+    }
+  }
+
+  onGetAllFormData(formData: any): void {
+    this.formData = formData;
   }
 
   onCancel(event: Event): void {

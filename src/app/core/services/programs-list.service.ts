@@ -33,10 +33,18 @@ export class ProgramsListService {
     );
   }
 
+  getProgramRules(url: string): Observable<any> {
+    return this.httpClient.get(url);
+  }
+
+  getProgramRuleActions(url: string): Observable<any> {
+    return this.httpClient.get(url);
+  }
+
   getProgramStageDetails(programStageId: string): Observable<any> {
     return this.httpClient
       .get(
-        `programStages/${programStageId}.json?fields=id,name,dataEntryForm[*],programStageDataElements[id,sortOrder,mandatory,dataElement[id,name,valueType,optionSetValue,attributeValues,optionSet[id,name,options[id,name,code]]]],programStageSections[id,name,sortOrder,dataElements[id,name,valueType,attributeValues,optionSetValue,optionSet[id,name,options[id,name,code]]]]`
+        `programStages/${programStageId}.json?fields=id,name,dataEntryForm[*],programStageDataElements[id,sortOrder,mandatory,dataElement[id,name,aggregationType,displayName,shortName,valueType,optionSetValue,attributeValues,optionSet[id,name,options[id,name,code]]]],programStageSections[id,name,sortOrder,dataElements[id,name,valueType,attributeValues,optionSetValue,optionSet[id,name,options[id,name,code]]]]`
       )
       .pipe(
         map((response) => {

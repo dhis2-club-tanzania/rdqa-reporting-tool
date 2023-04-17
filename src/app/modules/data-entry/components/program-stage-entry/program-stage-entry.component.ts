@@ -19,6 +19,11 @@ export class ProgramStageEntryComponent implements OnInit {
   @Input() supervisionDate: any;
   @Input() reportingDate: any;
   @Input() orgUnitId: string;
+  @Input() programRules: any[];
+  @Input() programRuleActions: any[];
+  @Input() programRuleVariables: any[];
+  @Input() programId: string;
+  @Input() formData: any;
   programStage$: Observable<any>;
   requiredElements: any[] = [
     { id: 'AA4OYrWbh2U', name: 'Verification Level' },
@@ -41,6 +46,10 @@ export class ProgramStageEntryComponent implements OnInit {
   @Output() formulatedPayload: EventEmitter<any> = new EventEmitter<any>();
   @Output() paperReviewedData: EventEmitter<any> = new EventEmitter<any>();
   @Output() selectedPeriods: EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() allFormData: EventEmitter<any> = new EventEmitter<any>();
+  sectionsToHide: any = {};
+  optionsToHide: any = {};
+  itemsToHide: any = {};
   constructor(
     private programsListService: ProgramsListService,
     private dataService: DataServiceService
@@ -143,7 +152,50 @@ export class ProgramStageEntryComponent implements OnInit {
       };
     });
     this.stageKeyedData[programStage?.id] = uniqBy(dataItems, 'id');
+    this.formData[programStage?.id] = this.currentStageFormData;
+    this.allFormData.emit(this.formData);
     this.formulatedPayload.emit(this.stageKeyedData);
+  }
+
+  onGetProgramRulesActionsResults(programRuleActions: any): void {
+    // console.log('programRuleActions', programRuleActions);
+    this.itemsToHide = {
+      ...this.itemsToHide,
+      ...keyBy(
+        (
+          programRuleActions?.filter(
+            (programRuleAction) =>
+              programRuleAction?.programRuleActionType === 'HIDESECTION'
+          ) || []
+        )?.map((programRuleAction: any) => {
+          return {
+            ...programRuleAction,
+            programStageSectionId: programRuleAction?.programStageSection?.id,
+          };
+        }),
+        'programStageSectionId'
+      ),
+    };
+
+    this.itemsToHide = {
+      ...this.itemsToHide,
+      ...keyBy(
+        (
+          programRuleActions?.filter(
+            (programRuleAction) =>
+              programRuleAction?.programRuleActionType === 'HIDEOPTION'
+          ) || []
+        )?.map((programRuleAction: any) => {
+          return {
+            ...programRuleAction,
+            optionId: programRuleAction?.option?.id,
+          };
+        }),
+        'optionId'
+      ),
+    };
+
+    // console.log('itemsToHide', this.itemsToHide);
   }
 
   onGetCustomFormDataValues(values: any, programStage: any): void {
