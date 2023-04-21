@@ -64,8 +64,9 @@
         <div class="row">
           <div class="col-12">
             <b>
-              {{ stageSection?.name }} - {{ stageSection?.id }} -
-              {{ stageSection?.id }}
+              {{ stageSection?.name }}
+              <!-- - {{ stageSection?.id }} -
+              {{ stageSection?.id }} -->
             </b>
           </div>
         </div>
@@ -89,7 +90,7 @@
                   >
                     {{ period?.name }}
                   </th>
-                  <th></th>
+                  <th class="text-center"></th>
                 </tr>
                 <tr>
                   <ng-container *ngFor="let period of periodsToFeedData">
@@ -102,7 +103,7 @@
                             : '1% !important'
                       }"
                     >
-                      System
+                      DHIS2-ETL Result
                     </th>
                     <th
                       class="text-center"
@@ -113,19 +114,9 @@
                             : '1% !important'
                       }"
                     >
-                      Paper Tool
+                      Unit Register Result
                     </th>
-                    <th
-                      class="text-center"
-                      [ngStyle]="{
-                        width:
-                          periodsToFeedData?.length <= 4
-                            ? '3% !important'
-                            : '1% !important'
-                      }"
-                    >
-                      Yes/No
-                    </th>
+
                     <th
                       class="text-center"
                       [ngStyle]="{
@@ -136,6 +127,17 @@
                       }"
                     >
                       Variance
+                    </th>
+                    <th
+                      class="text-center"
+                      [ngStyle]="{
+                        width:
+                          periodsToFeedData?.length <= 4
+                            ? '3% !important'
+                            : '1% !important'
+                      }"
+                    >
+                      Do result agree Y/N
                     </th>
                   </ng-container>
                   <th></th>
@@ -190,14 +192,15 @@
                     </td>
                     <td
                       class="text-center"
-                      [id]="dataElement?.id + '-' + period?.id + 'yes-no'"
+                      [id]="dataElement?.id + '-' + period?.id + 'variance'"
+                      [id]="dataElement?.id + '-' + period?.id + 'variance'"
                     ></td>
                     <td
                       class="text-center"
-                      [id]="dataElement?.id + '-' + period?.id + 'variance'"
+                      [id]="dataElement?.id + '-' + period?.id + 'yes-no'"
                     ></td>
                   </ng-container>
-                  <td></td>
+                  <td class="text-center"></td>
                 </tr>
               </tbody>
             </table>

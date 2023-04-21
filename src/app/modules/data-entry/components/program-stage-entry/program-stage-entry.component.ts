@@ -284,14 +284,18 @@ export class ProgramStageEntryComponent implements OnInit {
       ) {
         if (yesNoElem) {
           yesNoElem.innerText = 'Y';
+          yesNoElem.setAttribute('style', 'background-color: #3d8116');
         } else {
           yesNoElem.innerText = '';
+          yesNoElem.setAttribute('style', 'background-color: #FFF');
         }
       } else {
         if (yesNoElem) {
           yesNoElem.innerText = 'N';
+          yesNoElem.setAttribute('style', 'background-color: #d11f1f');
         } else {
           yesNoElem.innerText = '';
+          yesNoElem.setAttribute('style', 'background-color: #FFF');
         }
       }
 
