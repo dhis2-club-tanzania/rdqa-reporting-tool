@@ -11,7 +11,7 @@
     "
   >
     <div
-      class="col-md-3"
+      class="col-md-12"
       *ngFor="
         let programStageSection of params?.programStage?.programStageSections;
         let count = index
@@ -138,7 +138,7 @@
                       Variance
                     </th>
                   </ng-container>
-                  <!-- <th></th> -->
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -155,13 +155,13 @@
                     {{ dataElement?.name }}
                   </td>
                   <ng-container *ngFor="let period of periodsToFeedData">
-                    <td>
+                    <td class="text-center">
                       {{
                         indicatorsData[dataElement?.id + '-' + period?.id]
                           ?.value
                       }}
                     </td>
-                    <td style="padding: 4px">
+                    <td style="padding: 4px" class="text-center">
                       <!-- <app-data-entry-input
                         [period]="period"
                         [width]="'w-50'"
@@ -189,13 +189,15 @@
                       />
                     </td>
                     <td
+                      class="text-center"
                       [id]="dataElement?.id + '-' + period?.id + 'yes-no'"
                     ></td>
                     <td
+                      class="text-center"
                       [id]="dataElement?.id + '-' + period?.id + 'variance'"
                     ></td>
                   </ng-container>
-                  <!-- <td></td> -->
+                  <td></td>
                 </tr>
               </tbody>
             </table>

@@ -12,3 +12,7 @@ export function calculateVariance(numbers: number[]) {
   variance /= num;
   return variance;
 }
+
+export function differenceBetweenTwoNumbers(numbers: number[]) {
+  return Math.abs(numbers[0] - numbers[1]);
+}

@@ -128,7 +128,7 @@ export class ProgramStageSectionEntryComponent implements OnInit {
     );
 
     // console.log('results', results);
-    this.programRulesActionsResults.emit(results);
+    this.programRulesActionsResults.emit(null);
     this.capturedData.emit({
       stage: this.programStage,
       data: this.currentFormData,

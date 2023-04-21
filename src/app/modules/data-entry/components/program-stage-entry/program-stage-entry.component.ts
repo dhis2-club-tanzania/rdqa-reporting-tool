@@ -7,7 +7,10 @@ import { generatePeriodsFormDataVerificationPeriodTypeAndSupervisionDate } from 
 import { Dropdown } from 'src/app/shared/modules/forms/models/dropdown.model';
 import { FormValue } from 'src/app/shared/modules/forms/models/form-value.model';
 import { DataServiceService } from 'src/app/core/services/data-service.service';
-import { calculateVariance } from 'src/app/core/helpers/maths-calculations.helper';
+import {
+  calculateVariance,
+  differenceBetweenTwoNumbers,
+} from 'src/app/core/helpers/maths-calculations.helper';
 
 @Component({
   selector: 'app-program-stage-entry',
@@ -280,19 +283,19 @@ export class ProgramStageEntryComponent implements OnInit {
         Number(this.paperToolsData[key]?.value)
       ) {
         if (yesNoElem) {
-          yesNoElem.innerText = 'YES';
+          yesNoElem.innerText = 'Y';
         } else {
           yesNoElem.innerText = '';
         }
       } else {
         if (yesNoElem) {
-          yesNoElem.innerText = 'NO';
+          yesNoElem.innerText = 'N';
         } else {
           yesNoElem.innerText = '';
         }
       }
 
-      const variance = calculateVariance(numbers);
+      const variance = differenceBetweenTwoNumbers(numbers);
 
       const varianceElem = document.getElementById(key + 'variance');
       if (varianceElem) {
